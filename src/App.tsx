@@ -45,16 +45,17 @@ export function StaticBackdrop() {
       <img
         src="/photos/river-loveland.jpg"
         alt="Paddlers on the Little Miami River"
-        className="absolute inset-0 h-full w-full origin-center object-cover animate-kenburns motion-reduce:animate-none"
+        className="absolute inset-0 h-full w-full origin-center scale-110 object-cover blur-[3px] animate-kenburns motion-reduce:animate-none"
         loading="eager"
         fetchPriority="high"
       />
-      {/* white wash — strongest at top (nav + hero text) and bottom (CTA) */}
+      {/* white wash — keeps copy + frosted panels legible over the photo and ties
+          the real imagery to the monochrome system */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(244,244,242,0.82) 0%, rgba(244,244,242,0.30) 26%, rgba(244,244,242,0.38) 60%, rgba(244,244,242,0.86) 100%)',
+            'linear-gradient(to bottom, rgba(244,244,242,0.90) 0%, rgba(244,244,242,0.55) 28%, rgba(244,244,242,0.58) 62%, rgba(244,244,242,0.92) 100%)',
         }}
       />
       <div className="absolute inset-0 grain" />
