@@ -1,11 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk'
+// Vercel serverless function — Scenic River AI concierge.
+// Calls the Anthropic REST API with built-in fetch (no SDK import, so there is
+// nothing to bundle/resolve at runtime). Returns 503/502 on any problem so the
+// client transparently falls back to its local trip-matcher.
 
-// Trip data inlined so the function bundles standalone (no src/ alias imports).
-const TRIPS = [
-  { id: 'short', name: 'The Short Trip', miles: 2, hours: '1–1.5 hrs', level: 'Easy' },
-  { id: 'mid', name: "Fletcher's Mid Trip", miles: 6, hours: '2–3 hrs', level: 'Easy–Moderate' },
-  { id: 'long', name: 'The Long Trip', miles: 9, hours: '3.5–4.5 hrs', level: 'Easy–Moderate' },
-]
+const TRIP_IDS = ['short', 'mid', 'long']
 
 const SYSTEM = `You are the booking concierge for Scenic River Canoe Excursions on the Little Miami River near Cincinnati, Ohio.
 
@@ -28,42 +26,53 @@ export default async function handler(req: any, res: any) {
 
   const key = process.env.ANTHROPIC_API_KEY
   if (!key) {
-    // No key configured — tell the client to use its local fallback.
-    res.status(503).json({ error: 'concierge offline' })
+    res.status(503).json({ error: 'concierge offline — set ANTHROPIC_API_KEY' })
     return
   }
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
-    const message: string = body?.message ?? ''
-    const history: { role: 'user' | 'assistant'; content: string }[] = Array.isArray(body?.history)
+    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {}
+    const message: string = (body.message ?? '').toString()
+    const history: { role: string; content: string }[] = Array.isArray(body.history)
       ? body.history
       : []
-
     if (!message.trim()) {
       res.status(400).json({ error: 'empty message' })
       return
     }
 
-    const anthropic = new Anthropic({ apiKey: key })
-
-    const msgs = [
+    const messages = [
       ...history
         .filter((m) => m.role === 'user' || m.role === 'assistant')
-        .map((m) => ({ role: m.role, content: m.content })),
-      { role: 'user' as const, content: message },
+        .map((m) => ({ role: m.role, content: String(m.content) })),
+      { role: 'user', content: message },
     ]
 
-    const resp = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
-      system: SYSTEM,
-      messages: msgs,
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        system: SYSTEM,
+        messages,
+      }),
     })
 
-    const text = resp.content
-      .filter((b): b is Anthropic.TextBlock => b.type === 'text')
-      .map((b) => b.text)
+    if (!r.ok) {
+      const detail = await r.text()
+      res.status(502).json({ error: `anthropic ${r.status}`, detail: detail.slice(0, 200) })
+      return
+    }
+
+    const data: any = await r.json()
+    const text: string = (data.content ?? [])
+      .filter((b: any) => b.type === 'text')
+      .map((b: any) => b.text)
       .join('')
 
     let parsed: { content?: string; tripId?: string } = {}
@@ -74,12 +83,13 @@ export default async function handler(req: any, res: any) {
       if (m) parsed = JSON.parse(m[0])
     }
 
-    const tripId = TRIPS.some((t) => t.id === parsed.tripId) ? parsed.tripId : 'mid'
-    const content = parsed.content || "I'd start you on Fletcher's Mid Trip — our most-loved run. Want me to hold a spot?"
+    const tripId = TRIP_IDS.includes(parsed.tripId ?? '') ? parsed.tripId : 'mid'
+    const content =
+      parsed.content ||
+      "I'd start you on Fletcher's Mid Trip — our most-loved run, and it floats right past the brewery. Want me to hold a spot?"
 
     res.status(200).json({ content, tripId })
   } catch (e: any) {
-    // Any failure -> 502 so the client falls back to its local matcher.
     res.status(502).json({ error: e?.message ?? 'concierge error' })
   }
 }

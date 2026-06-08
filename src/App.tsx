@@ -33,24 +33,31 @@ export default function App() {
   )
 }
 
-/** CSS-only poster shown until WebGL is ready (and on low-power / reduced-motion). */
+/**
+ * Real-photo backdrop with a slow Ken Burns drift. This is what mobile and any
+ * non-WebGL device sees (most of our traffic), and the poster while the desktop
+ * 3D loads. A white wash keeps the frosted panels and dark text legible and ties
+ * the real imagery to the monochrome system.
+ */
 export function StaticBackdrop() {
   return (
-    <div className="absolute inset-0 grain">
+    <div className="absolute inset-0 overflow-hidden bg-canvas">
+      <img
+        src="/photos/river-loveland.jpg"
+        alt="Paddlers on the Little Miami River"
+        className="absolute inset-0 h-full w-full origin-center object-cover animate-kenburns motion-reduce:animate-none"
+        loading="eager"
+        fetchPriority="high"
+      />
+      {/* white wash — strongest at top (nav + hero text) and bottom (CTA) */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(120% 90% at 50% -10%, #ffffff 0%, #f4f4f2 45%, #e9e9e6 100%)',
+            'linear-gradient(to bottom, rgba(244,244,242,0.82) 0%, rgba(244,244,242,0.30) 26%, rgba(244,244,242,0.38) 60%, rgba(244,244,242,0.86) 100%)',
         }}
       />
-      <div
-        className="absolute inset-x-0 bottom-0 h-[55%] opacity-70"
-        style={{
-          background:
-            'radial-gradient(80% 120% at 50% 120%, rgba(180,182,186,0.55) 0%, rgba(244,244,242,0) 70%)',
-        }}
-      />
+      <div className="absolute inset-0 grain" />
     </div>
   )
 }

@@ -50,12 +50,18 @@ export default {
           '0%': { transform: 'scale(0.9)', opacity: '0.7' },
           '70%,100%': { transform: 'scale(2.2)', opacity: '0' },
         },
+        kenburns: {
+          '0%': { transform: 'scale(1.05) translate3d(0,0,0)' },
+          '50%': { transform: 'scale(1.16) translate3d(-1.5%,-1.5%,0)' },
+          '100%': { transform: 'scale(1.05) translate3d(0,0,0)' },
+        },
       },
       animation: {
         floaty: 'floaty 7s ease-in-out infinite',
         shimmer: 'shimmer 2.5s linear infinite',
         'fade-up': 'fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both',
         'pulse-ring': 'pulse-ring 2.4s cubic-bezier(0.16,1,0.3,1) infinite',
+        kenburns: 'kenburns 28s ease-in-out infinite',
       },
     },
   },
