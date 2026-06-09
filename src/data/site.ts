@@ -124,6 +124,7 @@ export const mapMarkers: MapMarker[] = [
 export type Photo = { src: string; caption: string; credit: string; tall?: boolean }
 
 export const gallery: Photo[] = [
+  { src: '/photos/scenic-launch.jpg', caption: 'Launch day at Scenic River', credit: 'Scenic River Canoe Excursions', tall: true },
   { src: '/photos/river-loveland.jpg', caption: 'Paddlers on the Little Miami', credit: 'A. Hemmer / CC BY-SA', tall: true },
   { src: '/photos/river-nisbet.jpg', caption: 'Gravel bars & easy water', credit: 'M. Nguyen / CC BY-SA' },
   { src: '/photos/river-obannon.jpg', caption: 'A quiet bend at O’Bannon Creek', credit: 'M. Nguyen / CC BY-SA' },

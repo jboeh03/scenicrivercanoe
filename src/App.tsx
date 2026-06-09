@@ -43,7 +43,7 @@ export default function App() {
 // Drop their actual Google Business / Instagram clip here (e.g. '/videos/hero.mp4')
 // and the hero becomes a real moving river. Falls back to the photo if unset.
 const HERO_VIDEO: string | null = '/videos/hero.mp4'
-const HERO_POSTER = '/photos/river-loveland.jpg'
+const HERO_POSTER = '/photos/scenic-launch.jpg' // their real launch photo (scraped from Google)
 
 /**
  * Real-river backdrop. This is what mobile and any non-WebGL device sees (most of
