@@ -3,6 +3,7 @@ import { Reveal } from '@/components/Reveal'
 import { FrostedPanel } from '@/components/FrostedPanel'
 import { business } from '@/data/site'
 import { useUsgsConditions, STATUS_COLOR, type ConditionStatus } from '@/hooks/useUsgsConditions'
+import { useWeather } from '@/hooks/useWeather'
 
 const statusWord: Record<ConditionStatus, string> = {
   go: 'GO',
@@ -12,6 +13,7 @@ const statusWord: Record<ConditionStatus, string> = {
 
 export function Conditions() {
   const { data, loading } = useUsgsConditions()
+  const weather = useWeather()
   const color = STATUS_COLOR[data.status]
 
   return (
@@ -78,7 +80,20 @@ export function Conditions() {
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-3 gap-3">
+            <div className="mt-6 flex items-center gap-3 rounded-2xl bg-white/40 px-4 py-3 hairline">
+              <span className="text-2xl">{weather.icon}</span>
+              <div className="flex-1">
+                <p className="text-[15px] font-semibold text-ink">
+                  {weather.tempF != null ? `${weather.tempF}°` : '—'} · {weather.label}
+                </p>
+                <p className="text-[12px] text-ink-faint">
+                  Live sky over the river{weather.windMph != null ? ` · wind ${weather.windMph} mph` : ''}
+                </p>
+              </div>
+              <span className="text-[11px] uppercase tracking-wider text-ink-faint">Weather</span>
+            </div>
+
+            <div className="mt-3 grid grid-cols-3 gap-3">
               <Metric
                 label="Flow"
                 value={data.flowCfs != null ? data.flowCfs.toLocaleString() : '—'}

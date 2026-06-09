@@ -4,13 +4,16 @@ import { Reveal } from '@/components/Reveal'
 import { FrostedPanel } from '@/components/FrostedPanel'
 import { trips, pricing, business } from '@/data/site'
 import { QrPlaceholder } from '@/components/QrPlaceholder'
+import { WaiverModal } from '@/components/WaiverModal'
 
 export function Booking() {
   const [tripId, setTripId] = useState('mid')
   const [people, setPeople] = useState(2)
   const [date, setDate] = useState('')
-  const [waiver, setWaiver] = useState(false)
+  const [signerName, setSignerName] = useState('')
+  const [showWaiver, setShowWaiver] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
+  const signed = signerName.length > 0
 
   const isWeekend = useMemo(() => {
     if (!date) return false
@@ -20,7 +23,7 @@ export function Booking() {
 
   const per = pricing.perPerson + (isWeekend ? pricing.weekendSurcharge : 0)
   const total = per * people
-  const canBook = !!date && waiver && people > 0
+  const canBook = !!date && signed && people > 0
   const trip = trips.find((t) => t.id === tripId)!
   const code = `SRC-${(tripId === 'mid' ? 6 : tripId === 'long' ? 9 : 2)}${people}${(date || '0000').slice(-2)}`
 
@@ -95,18 +98,31 @@ export function Booking() {
                   </div>
                 </div>
 
-                <label className="mb-5 flex cursor-pointer items-start gap-3 rounded-2xl bg-white/40 p-3 hairline">
-                  <input
-                    type="checkbox"
-                    checked={waiver}
-                    onChange={(e) => setWaiver(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 accent-ink"
-                  />
-                  <span className="text-[13px] leading-snug text-ink-soft">
-                    I've read and signed the digital liability waiver for all {people} paddler
-                    {people > 1 ? 's' : ''}.
+                <button
+                  onClick={() => setShowWaiver(true)}
+                  className={`mb-5 flex w-full items-center justify-between gap-3 rounded-2xl p-3 text-left transition-colors hairline ${
+                    signed ? 'bg-go/10' : 'bg-white/40 hover:bg-white/70'
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <span
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[13px]"
+                      style={{ background: signed ? '#3f7d6a' : 'rgba(22,24,58,0.08)', color: signed ? '#fff' : '#16183a' }}
+                    >
+                      {signed ? '✓' : '✎'}
+                    </span>
+                    <span className="text-[13px] leading-snug text-ink-soft">
+                      {signed ? (
+                        <>
+                          Waiver signed by <span className="font-semibold text-ink">{signerName}</span>
+                        </>
+                      ) : (
+                        <>Review &amp; sign the digital liability waiver</>
+                      )}
+                    </span>
                   </span>
-                </label>
+                  <span className="text-[12px] font-medium text-ink-faint">{signed ? 'Edit' : 'Open →'}</span>
+                </button>
 
                 <div className="mb-5 flex items-end justify-between">
                   <div>
@@ -150,6 +166,16 @@ export function Booking() {
           </FrostedPanel>
         </Reveal>
       </div>
+
+      {showWaiver && (
+        <WaiverModal
+          onClose={() => setShowWaiver(false)}
+          onSign={(name) => {
+            setSignerName(name)
+            setShowWaiver(false)
+          }}
+        />
+      )}
     </Section>
   )
 }

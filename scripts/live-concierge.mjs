@@ -1,0 +1,11 @@
+import { chromium } from 'playwright'
+const b=await chromium.launch({args:['--enable-unsafe-swiftshader','--ignore-gpu-blocklist']})
+const p=await b.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1.5})
+const errs=[]; p.on('pageerror',e=>errs.push(e.message))
+await p.goto('https://scenicrivercanoe.vercel.app/',{waitUntil:'networkidle'})
+await p.evaluate(()=>document.getElementById('concierge')?.scrollIntoView()); await p.waitForTimeout(800)
+await p.getByRole('button',{name:'Experienced — give us the long one'}).click()
+await p.waitForTimeout(3500)
+await p.screenshot({path:'/tmp/live-concierge.png'})
+console.log('done, errors:',errs.length)
+await b.close()

@@ -5,6 +5,7 @@ import { Gallery } from '@/sections/Gallery'
 import { Rewards } from '@/sections/Rewards'
 import { Concierge } from '@/sections/Concierge'
 import { Booking } from '@/sections/Booking'
+import { Faqs } from '@/sections/Faqs'
 import { Footer } from '@/sections/Footer'
 
 export function Home() {
@@ -17,6 +18,7 @@ export function Home() {
       <Rewards />
       <Concierge />
       <Booking />
+      <Faqs />
       <Footer />
     </>
   )

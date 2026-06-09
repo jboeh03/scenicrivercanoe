@@ -5,7 +5,7 @@ const links = [
   { href: '#conditions', label: 'River Today' },
   { href: '#trips', label: 'Trips' },
   { href: '#rewards', label: 'Rewards' },
-  { href: '#concierge', label: 'Plan' },
+  { href: '#faqs', label: 'FAQ' },
 ]
 
 export function Nav() {
@@ -54,14 +54,20 @@ export function Nav() {
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
+          <Link
+            to="/store"
+            className="hidden rounded-full px-3.5 py-1.5 text-[13px] font-medium text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink sm:inline-flex"
+          >
+            Shop
+          </Link>
           <Link
             to={onHome ? '/app' : '/'}
             className="hidden rounded-full px-3.5 py-1.5 text-[13px] font-medium text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink sm:inline-flex"
           >
             {onHome ? 'The App' : 'Home'}
           </Link>
-          <a href="#book" className="btn-ink !px-5 !py-2 text-[13px]">
+          <a href={onHome ? '#book' : '/#book'} className="btn-ink !px-5 !py-2 text-[13px]">
             Book
           </a>
         </div>
