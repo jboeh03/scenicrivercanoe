@@ -41,14 +41,19 @@ async function callGemini(key: string, messages: Msg[]): Promise<string> {
     parts: [{ text: m.content }],
   }))
   const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
     {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM }] },
         contents,
-        generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 300, temperature: 0.7 },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          maxOutputTokens: 400,
+          temperature: 0.7,
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
     },
   )
