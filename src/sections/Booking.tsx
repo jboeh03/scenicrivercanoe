@@ -2,13 +2,14 @@ import { useMemo, useState } from 'react'
 import { Section } from '@/components/Section'
 import { Reveal } from '@/components/Reveal'
 import { FrostedPanel } from '@/components/FrostedPanel'
-import { trips, pricing, business } from '@/data/site'
+import { trips, boats, pricing, business } from '@/data/site'
 import { QrPlaceholder } from '@/components/QrPlaceholder'
 import { WaiverModal } from '@/components/WaiverModal'
 import { WeatherDayPicker } from '@/components/WeatherDayPicker'
 
 export function Booking() {
   const [tripId, setTripId] = useState('mid')
+  const [boatId, setBoatId] = useState('single')
   const [people, setPeople] = useState(2)
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [signerName, setSignerName] = useState('')
@@ -26,6 +27,7 @@ export function Booking() {
   const total = per * people
   const canBook = !!date && signed && people > 0
   const trip = trips.find((t) => t.id === tripId)!
+  const boat = boats.find((b) => b.id === boatId)!
   const code = `SRC-${(tripId === 'mid' ? 6 : tripId === 'long' ? 9 : 2)}${people}${(date || '0000').slice(-2)}`
 
   return (
@@ -77,6 +79,31 @@ export function Booking() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="mb-5">
+                  <p className="eyebrow mb-2">Boat</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {boats.map((bt) => (
+                      <button
+                        key={bt.id}
+                        onClick={() => setBoatId(bt.id)}
+                        className={`rounded-2xl px-2 py-2.5 text-center transition-all ${
+                          bt.id === boatId
+                            ? 'bg-ink text-canvas'
+                            : 'hairline bg-white/40 text-ink hover:bg-white/70'
+                        }`}
+                      >
+                        <span className="block text-[13px] font-semibold leading-tight">
+                          {bt.name.replace(' Kayak', '').replace('Single', 'Single 🛶').replace('Tandem', 'Tandem 🛶').replace('Canoe', 'Canoe 🛶')}
+                        </span>
+                        <span className={`text-[10px] ${bt.id === boatId ? 'text-canvas/70' : 'text-ink-faint'}`}>
+                          {bt.capacity}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-1.5 px-1 text-[11px] text-ink-faint">{boat.name} · {boat.limit}</p>
                 </div>
 
                 <div className="mb-5">
@@ -142,7 +169,7 @@ export function Booking() {
                 <p className="eyebrow mb-1">You're on the river</p>
                 <h3 className="text-2xl font-semibold">{trip.name}</h3>
                 <p className="mt-1 text-[14px] text-ink-soft">
-                  {date} · {people} paddler{people > 1 ? 's' : ''} · ${total}
+                  {date} · {people} paddler{people > 1 ? 's' : ''} · {boat.name} · ${total}
                 </p>
                 <div className="my-6 rounded-3xl bg-white p-5 shadow-sm">
                   <QrPlaceholder size={150} seed={code} />

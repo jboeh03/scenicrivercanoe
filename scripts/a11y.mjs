@@ -1,0 +1,12 @@
+import { chromium } from 'playwright'
+const b=await chromium.launch({args:['--enable-unsafe-swiftshader']})
+const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true})
+await p.goto('https://scenicrivercanoe.vercel.app/',{waitUntil:'networkidle'})
+await p.waitForTimeout(2000)
+await p.addScriptTag({url:'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'})
+const res=await p.evaluate(async()=>await window.axe.run(document,{resultTypes:['violations']}))
+const out=res.violations.map(v=>({id:v.id,impact:v.impact,n:v.nodes.length,help:v.help}))
+  .sort((a,b)=>b.n-a.n)
+console.log('VIOLATIONS:',res.violations.length)
+out.forEach(v=>console.log(`  [${v.impact}] ${v.id} (${v.n}) — ${v.help}`))
+await b.close()

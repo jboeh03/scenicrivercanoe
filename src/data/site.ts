@@ -235,3 +235,36 @@ export const usedGear: UsedGear[] = [
   { id: 'g3', name: 'Aluminum Canoe — 16ft', price: 425, condition: 'Good', detail: 'Classic hull, hauls gear and kids. Two paddles included.', emoji: '🛶' },
   { id: 'g4', name: 'Youth PFD Bundle (x4)', price: 60, condition: 'Like new', detail: 'Coast Guard-approved kids’ life jackets, barely used.', emoji: '🦺' },
 ]
+
+// Boat types (from FAQ weight/age limits).
+export type Boat = { id: string; name: string; capacity: string; limit: string; emoji: string }
+
+export const boats: Boat[] = [
+  { id: 'single', name: 'Single Kayak', capacity: '1 paddler', limit: '≤ 275 lbs · ages 10+', emoji: '🛶' },
+  { id: 'tandem', name: 'Tandem Kayak', capacity: '2 paddlers', limit: '≤ 450 lbs', emoji: '🛶' },
+  { id: 'canoe', name: 'Canoe', capacity: '2–3 paddlers', limit: '≤ 500 lbs', emoji: '🛶' },
+]
+
+// Real review excerpts (Google / TripAdvisor — paraphrased lightly for length).
+export type Review = { quote: string; name: string; stars: number }
+
+export const reviews: Review[] = [
+  {
+    quote:
+      'From signing in to getting our gear and a friendly bus driver to the river, we were on our way to a fantastic day creating lifelong memories.',
+    name: 'Google review',
+    stars: 5,
+  },
+  { quote: 'Easy. Organized. Clean. Fun. Safe. Ryan was so helpful!', name: 'Google review', stars: 5 },
+  {
+    quote: 'The customer service here is far superior to any other local canoe/kayak rental place in the area.',
+    name: 'Google review',
+    stars: 5,
+  },
+  {
+    quote: 'Beautiful views and easy water — overall a great kayak experience for the whole family.',
+    name: 'TripAdvisor',
+    stars: 5,
+  },
+  { quote: 'The staff were so friendly and the instructions were concise and given with a smile.', name: 'Google review', stars: 5 },
+]

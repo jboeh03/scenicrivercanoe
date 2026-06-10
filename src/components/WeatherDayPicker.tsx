@@ -93,6 +93,13 @@ export function WeatherDayPicker({
       {sel && outlook && (
         <p className="mt-1.5 px-1 text-[11px] leading-snug text-ink-faint">{outlook.detail}</p>
       )}
+      {sel && (sel.precipProb ?? 0) >= 60 && (
+        <p className="mt-1.5 flex items-start gap-1.5 px-1 text-[11px] leading-snug text-caution">
+          <span>⚠️</span>
+          Rain likely this day — trips may be held if the river runs high. We’ll text you the day-of
+          status.
+        </p>
+      )}
     </div>
   )
 }
