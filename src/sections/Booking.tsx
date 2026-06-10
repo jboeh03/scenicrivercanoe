@@ -5,11 +5,12 @@ import { FrostedPanel } from '@/components/FrostedPanel'
 import { trips, pricing, business } from '@/data/site'
 import { QrPlaceholder } from '@/components/QrPlaceholder'
 import { WaiverModal } from '@/components/WaiverModal'
+import { WeatherDayPicker } from '@/components/WeatherDayPicker'
 
 export function Booking() {
   const [tripId, setTripId] = useState('mid')
   const [people, setPeople] = useState(2)
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [signerName, setSignerName] = useState('')
   const [showWaiver, setShowWaiver] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
@@ -78,23 +79,16 @@ export function Booking() {
                   </div>
                 </div>
 
-                <div className="mb-5 grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="eyebrow mb-2">Date</p>
-                    <input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      className="hairline w-full rounded-2xl bg-white/60 px-3 py-2.5 text-[14px] text-ink outline-none focus:bg-white"
-                    />
-                  </div>
-                  <div>
-                    <p className="eyebrow mb-2">Paddlers</p>
-                    <div className="hairline flex items-center justify-between rounded-2xl bg-white/60 px-2 py-1.5">
-                      <Step onClick={() => setPeople((p) => Math.max(1, p - 1))}>–</Step>
-                      <span className="text-[15px] font-semibold">{people}</span>
-                      <Step onClick={() => setPeople((p) => Math.min(20, p + 1))}>+</Step>
-                    </div>
+                <div className="mb-5">
+                  <WeatherDayPicker value={date} onChange={setDate} />
+                </div>
+
+                <div className="mb-5">
+                  <p className="eyebrow mb-2">Paddlers</p>
+                  <div className="hairline flex items-center justify-between rounded-2xl bg-white/60 px-2 py-1.5">
+                    <Step onClick={() => setPeople((p) => Math.max(1, p - 1))}>–</Step>
+                    <span className="text-[15px] font-semibold">{people}</span>
+                    <Step onClick={() => setPeople((p) => Math.min(20, p + 1))}>+</Step>
                   </div>
                 </div>
 
