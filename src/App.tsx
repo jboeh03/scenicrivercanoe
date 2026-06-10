@@ -42,7 +42,7 @@ export default function App() {
 // Set this to their real clip (e.g. '/videos/hero.mp4') and the hero becomes a
 // moving video. Null = the real launch photo with Ken Burns + scroll parallax.
 const HERO_VIDEO: string | null = null
-const HERO_POSTER = '/photos/scenic-launch.jpg' // their real launch photo (scraped from Google)
+const HERO_POSTER = '/photos/IMG_1568.jpeg' // their real POV-from-a-kayak shot
 
 /**
  * Real-river backdrop. This is what mobile and any non-WebGL device sees (most of

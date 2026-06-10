@@ -42,7 +42,7 @@ export function ConditionsScreen() {
       <h2 className="mb-3 text-[20px] font-semibold leading-tight">The river today</h2>
 
       <div className="relative overflow-hidden rounded-3xl">
-        <img src="/photos/scenic-launch.jpg" alt="" className="h-40 w-full object-cover" />
+        <img src="/photos/IMG_1573.jpeg" alt="" className="h-40 w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
         <span className="absolute right-3 top-3 rounded-full bg-go px-2.5 py-1 text-[11px] font-bold text-white">
           GO

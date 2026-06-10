@@ -46,7 +46,7 @@ export const trips: Trip[] = [
     hours: '1–1.5 hrs',
     blurb: 'A gentle first taste of the river. Perfect for young families and first-timers.',
     level: 'Easy',
-    image: '/photos/river-nisbet.jpg',
+    image: '/photos/IMG_1572.jpeg',
   },
   {
     id: 'mid',
@@ -58,7 +58,7 @@ export const trips: Trip[] = [
     level: 'Easy–Moderate',
     highlight: 'Brewery stop',
     popular: true,
-    image: '/photos/river-loveland.jpg',
+    image: '/photos/IMG_1574.jpeg',
   },
   {
     id: 'long',
@@ -67,7 +67,7 @@ export const trips: Trip[] = [
     hours: '3.5–4.5 hrs',
     blurb: 'A full day on the water for groups and seasoned paddlers chasing the quiet stretches.',
     level: 'Easy–Moderate',
-    image: '/photos/river-obannon.jpg',
+    image: '/photos/IMG_1573.jpeg',
   },
 ]
 
@@ -124,13 +124,12 @@ export const mapMarkers: MapMarker[] = [
 export type Photo = { src: string; caption: string; credit: string; tall?: boolean }
 
 export const gallery: Photo[] = [
-  { src: '/photos/scenic-launch.jpg', caption: 'Launch day at Scenic River', credit: 'Scenic River Canoe Excursions', tall: true },
-  { src: '/photos/river-loveland.jpg', caption: 'Paddlers on the Little Miami', credit: 'A. Hemmer / CC BY-SA', tall: true },
-  { src: '/photos/river-nisbet.jpg', caption: 'Gravel bars & easy water', credit: 'M. Nguyen / CC BY-SA' },
-  { src: '/photos/river-obannon.jpg', caption: 'A quiet bend at O’Bannon Creek', credit: 'M. Nguyen / CC BY-SA' },
-  { src: '/photos/river-clifton.jpg', caption: 'Wooded banks, mile after mile', credit: 'M. Kowal / CC BY-SA', tall: true },
-  { src: '/photos/river-closeup.jpg', caption: 'Clear shallows you can read', credit: 'M. Nguyen / CC BY-SA' },
-  { src: '/photos/river-path.jpg', caption: 'Down to the put-in', credit: 'M. Nguyen / CC BY-SA' },
+  { src: '/photos/IMG_1573.jpeg', caption: 'A summer day on the Little Miami', credit: 'Scenic River Canoe Excursions', tall: true },
+  { src: '/photos/IMG_1574.jpeg', caption: 'Boats out, ready to launch', credit: 'Scenic River Canoe Excursions' },
+  { src: '/photos/IMG_1571.jpeg', caption: 'Good times on the water', credit: 'Scenic River Canoe Excursions' },
+  { src: '/photos/IMG_1572.jpeg', caption: 'Little paddlers, big adventures', credit: 'Scenic River Canoe Excursions', tall: true },
+  { src: '/photos/IMG_1570.jpeg', caption: 'Groups & parties welcome', credit: 'Scenic River Canoe Excursions' },
+  { src: '/photos/IMG_1576.png', caption: 'The Little Miami, mapped', credit: 'Scenic River Canoe Excursions', tall: true },
 ]
 
 // FAQs — verbatim from scenicrivercanoe.com/faqs (condensed answers).
