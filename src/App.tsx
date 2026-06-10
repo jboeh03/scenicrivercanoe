@@ -40,9 +40,9 @@ export default function App() {
   )
 }
 
-// Drop their actual Google Business / Instagram clip here (e.g. '/videos/hero.mp4')
-// and the hero becomes a real moving river. Falls back to the photo if unset.
-const HERO_VIDEO: string | null = '/videos/hero.mp4'
+// Set this to their real clip (e.g. '/videos/hero.mp4') and the hero becomes a
+// moving video. Null = the real launch photo with Ken Burns + scroll parallax.
+const HERO_VIDEO: string | null = null
 const HERO_POSTER = '/photos/scenic-launch.jpg' // their real launch photo (scraped from Google)
 
 /**
