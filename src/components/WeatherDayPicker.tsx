@@ -1,4 +1,5 @@
 import { useForecast, riverOutlook } from '@/hooks/useForecast'
+import { useRiverForecast, classifyRiver } from '@/hooks/useRiverForecast'
 import { STATUS_COLOR } from '@/hooks/useUsgsConditions'
 
 export function WeatherDayPicker({
@@ -9,9 +10,25 @@ export function WeatherDayPicker({
   onChange: (iso: string) => void
 }) {
   const { days, fallback } = useForecast()
+  const river = useRiverForecast()
   const idx = days.findIndex((d) => d.iso === value)
   const sel = idx >= 0 ? days[idx] : null
-  const outlook = sel ? riverOutlook(days, idx) : null
+
+  // Prefer the real NOAA gauge forecast for this day; fall back to a rainfall estimate.
+  const noaaDay = sel ? river.forecast.find((f) => f.date === sel.iso) : undefined
+  const noaa = noaaDay
+    ? {
+        ...classifyRiver(noaaDay.flowCfs, noaaDay.stage, river.thresholds.action),
+        detail: `NOAA forecast · ${noaaDay.stage.toFixed(1)} ft · ${noaaDay.flowCfs.toLocaleString()} cfs`,
+        source: 'NOAA forecast',
+      }
+    : null
+  const estimate = sel ? riverOutlook(days, idx) : null
+  const outlook = noaa
+    ? noaa
+    : estimate
+      ? { ...estimate, source: 'projected from rainfall' }
+      : null
 
   return (
     <div>
@@ -56,12 +73,19 @@ export function WeatherDayPicker({
               <span className="font-normal text-ink-faint">/{sel.lo}°</span>
               {sel.weekend && <span className="ml-1 text-ink-faint">· weekend</span>}
             </p>
-            <p className="flex items-center gap-1.5 text-[12px] text-ink-soft">
+            <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[12px] text-ink-soft">
               <span
                 className="inline-block h-2 w-2 rounded-full"
                 style={{ background: STATUS_COLOR[outlook.tone] }}
               />
-              Projected river: <span className="font-medium text-ink">{outlook.label}</span>
+              River: <span className="font-medium text-ink">{outlook.label}</span>
+              <span
+                className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${
+                  noaa ? 'bg-go/15 text-go' : 'bg-ink/8 text-ink-faint'
+                }`}
+              >
+                {outlook.source}
+              </span>
             </p>
           </div>
         </div>

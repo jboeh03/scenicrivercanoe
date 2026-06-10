@@ -4,6 +4,7 @@ import { FrostedPanel } from '@/components/FrostedPanel'
 import { business } from '@/data/site'
 import { useUsgsConditions, STATUS_COLOR, type ConditionStatus } from '@/hooks/useUsgsConditions'
 import { useWeather } from '@/hooks/useWeather'
+import { useRiverForecast } from '@/hooks/useRiverForecast'
 
 const statusWord: Record<ConditionStatus, string> = {
   go: 'GO',
@@ -14,6 +15,18 @@ const statusWord: Record<ConditionStatus, string> = {
 export function Conditions() {
   const { data, loading } = useUsgsConditions()
   const weather = useWeather()
+  const river = useRiverForecast()
+
+  const noaaTrend = (() => {
+    const f = river.forecast
+    if (f.length < 2) return null
+    const a = f[0].stage
+    const b = f[f.length - 1].stage
+    const verb = b > a + 0.3 ? 'rising' : b < a - 0.3 ? 'easing' : 'holding'
+    return `${verb} ${a.toFixed(1)} → ${b.toFixed(1)} ft through ${new Date(
+      f[f.length - 1].date + 'T12:00:00',
+    ).toLocaleDateString('en-US', { weekday: 'short' })}`
+  })()
   const color = STATUS_COLOR[data.status]
 
   return (
@@ -92,6 +105,15 @@ export function Conditions() {
               </div>
               <span className="text-[11px] uppercase tracking-wider text-ink-faint">Weather</span>
             </div>
+
+            {noaaTrend && (
+              <div className="mt-3 flex items-center gap-2 rounded-2xl bg-white/40 px-4 py-2.5 hairline">
+                <span className="text-[15px]">📈</span>
+                <p className="flex-1 text-[12.5px] text-ink-soft">
+                  <span className="font-semibold text-ink">NOAA 5-day forecast:</span> {noaaTrend}
+                </p>
+              </div>
+            )}
 
             <div className="mt-3 grid grid-cols-3 gap-3">
               <Metric
