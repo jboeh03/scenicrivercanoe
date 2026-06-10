@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { Section } from '@/components/Section'
 import { Reveal } from '@/components/Reveal'
 import { business } from '@/data/site'
@@ -12,10 +12,31 @@ const statusLabel: Record<string, string> = {
 
 export function Hero() {
   const { data } = useUsgsConditions()
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  // Scroll-linked hero motion: the headline lifts and fades as you scroll past,
+  // so the header clearly animates (independent of the Reveal entrance).
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    let raf = 0
+    const loop = () => {
+      const el = contentRef.current
+      if (el) {
+        const y = window.scrollY || 0
+        const vh = window.innerHeight || 800
+        const r = Math.min(1, y / (vh * 0.85))
+        el.style.transform = `translate3d(0, ${(-y * 0.14).toFixed(1)}px, 0)`
+        el.style.opacity = `${Math.max(0, 1 - r * 1.15).toFixed(3)}`
+      }
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   return (
     <Section id="top" className="!pt-36">
-      <div className="flex flex-col items-center text-center">
+      <div ref={contentRef} className="flex flex-col items-center text-center will-change-transform">
         <Reveal>
           <a
             href="#conditions"

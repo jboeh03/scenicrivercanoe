@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { scrollState } from '@/scroll/scrollState'
 import { LenisProvider } from '@/scroll/LenisProvider'
 import { Nav } from '@/components/Nav'
 import { QuickContact } from '@/components/QuickContact'
@@ -60,9 +59,12 @@ export function StaticBackdrop() {
     const loop = () => {
       const el = wrapRef.current
       if (el) {
-        const p = scrollState.progress || 0
-        // travel "downstream": ease up + zoom slightly as the page scrolls
-        el.style.transform = `translate3d(0, ${(-p * 8).toFixed(2)}%, 0) scale(${(1.1 + p * 0.08).toFixed(3)})`
+        // Scroll-linked to the first ~1.4 viewports so the motion is visible while
+        // scrolling the header (whole-page progress made it imperceptible).
+        const vh = window.innerHeight || 800
+        const r = Math.min(1, (window.scrollY || 0) / (vh * 1.4))
+        // "dive into the river": pan up + zoom in as you scroll the hero
+        el.style.transform = `translate3d(0, ${(-r * 12).toFixed(2)}%, 0) scale(${(1.08 + r * 0.2).toFixed(3)})`
       }
       raf = requestAnimationFrame(loop)
     }
