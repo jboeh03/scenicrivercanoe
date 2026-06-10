@@ -16,94 +16,113 @@ const markerGlyph: Record<MapMarker['kind'], string> = {
 
 export function Trips() {
   const [active, setActive] = useState('mid')
+  const mid = trips.find((t) => t.id === 'mid')!
+  const others = trips.filter((t) => t.id !== 'mid')
 
   return (
     <Section id="trips" align="center">
       <Reveal>
-        <p className="eyebrow mb-3 text-center">Choose your distance</p>
+        <p className="eyebrow mb-3 text-center">The signature float</p>
       </Reveal>
       <Reveal delay={0.05}>
-        <h2 className="mx-auto mb-12 max-w-[18ch] text-center text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1]">
-          Three ways down the Little Miami.
+        <h2 className="mx-auto mb-3 max-w-[20ch] text-center text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1]">
+          Six miles, one brewery, zero stress.
         </h2>
       </Reveal>
+      <Reveal delay={0.1}>
+        <p className="mx-auto mb-12 max-w-lg text-center text-lg leading-relaxed text-ink-soft">
+          It’s the trip almost everyone comes for — the perfect half-day on the Little Miami.
+        </p>
+      </Reveal>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.05fr]">
-        <div className="flex flex-col gap-3">
-          {trips.map((t, i) => {
-            const on = t.id === active
-            return (
-              <Reveal key={t.id} delay={0.05 * i}>
-                <button
-                  onMouseEnter={() => setActive(t.id)}
-                  onFocus={() => setActive(t.id)}
-                  onClick={() => setActive(t.id)}
-                  className={`group w-full text-left transition-all duration-300 ${
-                    on ? 'scale-[1.01]' : 'opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <FrostedPanel
-                    strong={on}
-                    className="flex items-center gap-5 p-5"
-                    style={on ? { boxShadow: '0 30px 80px -30px rgba(21,19,26,0.4)' } : undefined}
-                  >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl">
-                      <img
-                        src={t.image}
-                        alt={`${t.name} on the Little Miami`}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/10 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-1 flex flex-col items-center text-canvas">
-                        <span className="text-2xl font-bold leading-none drop-shadow-sm">{t.miles}</span>
-                        <span className="text-[9px] uppercase tracking-wider opacity-90">miles</span>
-                      </div>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold">{t.name}</h3>
-                        {t.popular && (
-                          <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-ink">
-                            Most loved
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-1 text-[14px] leading-snug text-ink-soft">{t.blurb}</p>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-ink-faint">
-                        <span>⏱ {t.hours}</span>
-                        <span>· {t.level}</span>
-                        {t.highlight && <span>· {t.highlight}</span>}
-                      </div>
-                    </div>
-                  </FrostedPanel>
-                </button>
-              </Reveal>
-            )
-          })}
-          <Reveal delay={0.2}>
-            <p className="px-2 pt-1 text-[13px] text-ink-faint">
-              ${pricing.perPerson}/person · +${pricing.weekendSurcharge} weekends & holidays · shuttle
-              included
-            </p>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.1}>
-          <FrostedPanel className="h-full p-6">
-            <div className="mb-3 flex items-center justify-between">
-              <p className="eyebrow">Live trip map</p>
-              <span className="text-[12px] text-ink-faint">put-in → take-out</span>
+      <div className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+        {/* Featured 6-mile trip */}
+        <Reveal>
+          <FrostedPanel
+            strong
+            className="flex h-full flex-col overflow-hidden"
+            onMouseEnter={() => setActive('mid')}
+          >
+            <div className="relative h-52 w-full overflow-hidden">
+              <img src={mid.image} alt="Fletcher's Mid Trip on the Little Miami" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
+              <span className="absolute left-4 top-4 rounded-full bg-brand-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink">
+                Most loved
+              </span>
+              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-canvas">
+                <div>
+                  <h3 className="text-2xl font-semibold leading-none">{mid.name}</h3>
+                  <p className="mt-1.5 text-[13px] opacity-90">⏱ {mid.hours} · {mid.level} · 🍺 Brewery stop</p>
+                </div>
+                <div className="text-right leading-none">
+                  <span className="block text-4xl font-bold">{mid.miles}</span>
+                  <span className="text-[10px] uppercase tracking-wider opacity-80">miles</span>
+                </div>
+              </div>
             </div>
-            <RiverMap activeEnd={tripEnd[active]} />
-            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-[12px] text-ink-soft">
-              <Legend glyph="▲" label="Put-in" />
-              <Legend glyph="🍺" label="Brewery stop" />
-              <Legend glyph="✦" label="Wildlife" />
-              <Legend glyph="■" label="Take-out · shuttle" />
+            <div className="flex flex-1 flex-col p-6">
+              <p className="text-[15px] leading-relaxed text-ink-soft">{mid.blurb}</p>
+              <div className="mt-5 flex items-end justify-between">
+                <div>
+                  <span className="text-3xl font-semibold text-ink">${pricing.perPerson}</span>
+                  <span className="ml-1 text-[13px] text-ink-faint">/ person · shuttle included</span>
+                </div>
+              </div>
+              <a href="#book" className="btn-ink mt-4 w-full">
+                Book the 6-mile float
+              </a>
             </div>
           </FrostedPanel>
         </Reveal>
+
+        {/* Map + subtle other options */}
+        <div className="flex flex-col gap-4">
+          <Reveal delay={0.1}>
+            <FrostedPanel className="p-6">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="eyebrow">Live trip map</p>
+                <span className="text-[12px] text-ink-faint">put-in → take-out</span>
+              </div>
+              <RiverMap activeEnd={tripEnd[active]} />
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-[12px] text-ink-soft">
+                <Legend glyph="▲" label="Put-in" />
+                <Legend glyph="🍺" label="Brewery stop" />
+                <Legend glyph="✦" label="Wildlife" />
+                <Legend glyph="■" label="Take-out" />
+              </div>
+            </FrostedPanel>
+          </Reveal>
+
+          <Reveal delay={0.18}>
+            <div>
+              <p className="mb-2 px-1 text-[13px] text-ink-faint">Short on time, or chasing a full day?</p>
+              <div className="grid grid-cols-2 gap-3">
+                {others.map((t) => (
+                  <button
+                    key={t.id}
+                    onMouseEnter={() => setActive(t.id)}
+                    onFocus={() => setActive(t.id)}
+                    onClick={() => setActive('mid')}
+                    className="text-left"
+                  >
+                    <FrostedPanel className="flex items-center gap-3 p-3 transition-transform hover:-translate-y-0.5">
+                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-ink/8">
+                        <span className="text-lg font-bold leading-none text-ink">{t.miles}</span>
+                        <span className="text-[8px] uppercase tracking-wide text-ink-faint">mi</span>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-[13px] font-semibold text-ink">
+                          {t.id === 'short' ? 'Quicker' : 'Longer'}
+                        </p>
+                        <p className="text-[11px] text-ink-faint">{t.hours}</p>
+                      </div>
+                    </FrostedPanel>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </Section>
   )
