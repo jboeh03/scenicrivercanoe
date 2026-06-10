@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scenic River Canoe — Concept Preview (Desktop + Mobile)</title>
+    <style>
+      :root { --ink:#16183a; --gold:#e0b13a; --soft:#565a73; --line:rgba(22,24,58,.1); }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: #ecedf0; color: var(--ink);
+        font-family: -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+        padding: 28px clamp(16px, 4vw, 48px) 64px;
+      }
+      header { display:flex; flex-wrap:wrap; align-items:center; gap:14px; justify-content:space-between; margin-bottom: 6px; }
+      h1 { font-size: clamp(1.3rem, 3vw, 2rem); margin: 0; letter-spacing: -.02em; }
+      .sub { color: var(--soft); font-size: 14px; margin: 4px 0 26px; }
+      a.live { background: var(--ink); color:#f4f4f2; text-decoration:none; font-size:13px; font-weight:600;
+               padding:10px 16px; border-radius:999px; }
+      a.live:hover { opacity:.9; }
+      .stage { display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+      .col { display:flex; flex-direction:column; align-items:center; gap:12px; }
+      .label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.18em; color:var(--soft); }
+
+      /* desktop browser frame */
+      .browser { width: min(900px, 92vw); border-radius:14px; overflow:hidden; background:#fff;
+                 box-shadow: 0 30px 80px -30px rgba(22,24,58,.4); border:1px solid var(--line); }
+      .bar { height:38px; background:#f4f4f5; display:flex; align-items:center; gap:7px; padding:0 14px; border-bottom:1px solid var(--line); }
+      .dot { width:11px; height:11px; border-radius:50%; background:#dadbe0; }
+      .url { margin-left:10px; font-size:12px; color:var(--soft); background:#fff; border:1px solid var(--line);
+             border-radius:6px; padding:3px 10px; flex:1; }
+      .desktop-vp { width:1440px; height:900px; border:0; transform-origin: top left; }
+      .desktop-wrap { overflow:hidden; }
+
+      /* iphone frame */
+      .phone { width: 390px; max-width:90vw; aspect-ratio: 390 / 844; background:#16183a; border-radius:46px;
+               padding:12px; box-shadow: 0 30px 80px -30px rgba(22,24,58,.45); position:relative; }
+      .phone::before { content:""; position:absolute; top:18px; left:50%; transform:translateX(-50%);
+                       width:120px; height:26px; background:#16183a; border-radius:0 0 16px 16px; z-index:2; }
+      .screen { width:100%; height:100%; border:0; border-radius:34px; background:#f4f4f2; }
+      .note { text-align:center; color:var(--soft); font-size:12px; margin-top:30px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Scenic River Canoe — Concept Preview</h1>
+        <div class="sub">Live, interactive. Scroll either frame. Desktop shows the WebGL river; mobile shows the real-photo hero.</div>
+      </div>
+      <a class="live" href="https://scenicrivercanoe.vercel.app" target="_blank" rel="noreferrer">Open live site ↗</a>
+    </header>
+
+    <div class="stage">
+      <div class="col">
+        <span class="label">Desktop</span>
+        <div class="browser">
+          <div class="bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="url">scenicrivercanoe.vercel.app</span>
+          </div>
+          <div class="desktop-wrap" id="dwrap">
+            <iframe class="desktop-vp" id="dframe" src="https://scenicrivercanoe.vercel.app" title="Desktop preview"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <span class="label">Mobile</span>
+        <div class="phone">
+          <iframe class="screen" src="https://scenicrivercanoe.vercel.app" title="Mobile preview"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">If a frame is blank, click “Open live site” above — some browsers block embedding. Concept by request; placeholder photography until Scenic River’s own media is added.</p>
+
+    <script>
+      // scale the 1440px desktop viewport down to fit the browser frame width
+      function fit() {
+        var wrap = document.getElementById('dwrap');
+        var frame = document.getElementById('dframe');
+        var scale = wrap.clientWidth / 1440;
+        frame.style.transform = 'scale(' + scale + ')';
+        wrap.style.height = (900 * scale) + 'px';
+      }
+      window.addEventListener('resize', fit);
+      window.addEventListener('load', fit);
+      fit();
+    </script>
+  </body>
+</html>
