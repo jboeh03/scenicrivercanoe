@@ -11,6 +11,7 @@ export function Booking() {
   const [tripId, setTripId] = useState('mid')
   const [boatId, setBoatId] = useState('single')
   const [people, setPeople] = useState(2)
+  const [time, setTime] = useState('11:00a')
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [signerName, setSignerName] = useState('')
   const [showWaiver, setShowWaiver] = useState(false)
@@ -110,14 +111,33 @@ export function Booking() {
                   <WeatherDayPicker value={date} onChange={setDate} />
                 </div>
 
-                <div className="mb-5">
-                  <p className="eyebrow mb-2">Paddlers</p>
-                  <div className="hairline flex items-center justify-between rounded-2xl bg-white/60 px-2 py-1.5">
-                    <Step onClick={() => setPeople((p) => Math.max(1, p - 1))}>–</Step>
-                    <span className="text-[15px] font-semibold">{people}</span>
-                    <Step onClick={() => setPeople((p) => Math.min(20, p + 1))}>+</Step>
+                <div className="mb-5 grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="eyebrow mb-2">Paddlers</p>
+                    <div className="hairline flex items-center justify-between rounded-2xl bg-white/60 px-2 py-1.5">
+                      <Step onClick={() => setPeople((p) => Math.max(1, p - 1))}>–</Step>
+                      <span className="text-[15px] font-semibold">{people}</span>
+                      <Step onClick={() => setPeople((p) => Math.min(20, p + 1))}>+</Step>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="eyebrow mb-2">Launch time</p>
+                    <select
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      className="hairline w-full rounded-2xl bg-white/60 px-3 py-2.5 text-[14px] font-semibold text-ink outline-none focus:bg-white"
+                    >
+                      {['9:30a', '10:30a', '11:00a', '12:30p', '1:30p', '2:30p'].map((t) => (
+                        <option key={t} value={t}>
+                          {t.replace('a', ' AM').replace('p', ' PM')}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+                <p className="-mt-3 mb-5 px-1 text-[11px] text-ink-faint">
+                  Buses leave every 15–20 min · last bus 3:00 PM
+                </p>
 
                 <button
                   onClick={() => setShowWaiver(true)}
@@ -169,7 +189,8 @@ export function Booking() {
                 <p className="eyebrow mb-1">You're on the river</p>
                 <h3 className="text-2xl font-semibold">{trip.name}</h3>
                 <p className="mt-1 text-[14px] text-ink-soft">
-                  {date} · {people} paddler{people > 1 ? 's' : ''} · {boat.name} · ${total}
+                  {date} · {time.replace('a', ' AM').replace('p', ' PM')} · {people} paddler
+                  {people > 1 ? 's' : ''} · {boat.name} · ${total}
                 </p>
                 <div className="my-6 rounded-3xl bg-white p-5 shadow-sm">
                   <QrPlaceholder size={150} seed={code} />

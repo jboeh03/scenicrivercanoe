@@ -73,8 +73,8 @@ export function Hero() {
 
         <Reveal delay={0.18}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <a href="#book" className="btn-ink">
-              Reserve your trip
+            <a href="#trips" className="btn-ink">
+              Find your trip
             </a>
             <a href="#conditions" className="btn-ghost">
               Check the river
