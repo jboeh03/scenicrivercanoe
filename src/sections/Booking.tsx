@@ -65,7 +65,9 @@ export function Booking() {
                 <div className="mb-5">
                   <p className="eyebrow mb-2">Trip</p>
                   <div className="grid grid-cols-3 gap-2">
-                    {trips.map((t) => (
+                    {[...trips]
+                      .sort((a, b) => (a.id === 'mid' ? -1 : b.id === 'mid' ? 1 : 0))
+                      .map((t) => (
                       <button
                         key={t.id}
                         onClick={() => setTripId(t.id)}

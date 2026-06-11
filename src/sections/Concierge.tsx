@@ -47,7 +47,7 @@ export function Concierge() {
           <Reveal delay={0.12}>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
               No menus to decode. Describe your group like you'd text a friend, and the concierge
-              matches you to the right distance, time, and put-in — then books it.
+              matches you to the right distance, time, and put-in — then starts your booking.
             </p>
           </Reveal>
           <Reveal delay={0.18}>

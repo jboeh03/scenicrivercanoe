@@ -114,7 +114,9 @@ export function Trips() {
                         <p className="truncate text-[13px] font-semibold text-ink">
                           {t.id === 'short' ? 'Quicker' : 'Longer'}
                         </p>
-                        <p className="text-[11px] text-ink-faint">{t.hours}</p>
+                        <p className="text-[11px] text-ink-faint">
+                          {t.hours} · ${pricing.perPerson}
+                        </p>
                       </div>
                     </FrostedPanel>
                   </button>

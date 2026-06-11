@@ -51,7 +51,7 @@ const FEATURES: Feature[] = [
   {
     eyebrow: 'AI concierge',
     title: 'Plan in a sentence.',
-    body: 'Describe your crew like you’d text a friend; the concierge picks the right trip and books it — powered by Claude.',
+    body: 'Describe your crew like you’d text a friend; the concierge recommends the right trip and starts your booking — powered by Claude.',
     bullets: ['Natural-language trip matching', 'Answers FAQs instantly', 'One-tap to book'],
     screen: <ConciergeScreen />,
   },
