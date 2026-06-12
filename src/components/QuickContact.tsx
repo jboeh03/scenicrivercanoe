@@ -20,7 +20,7 @@ export function QuickContact() {
   const isOpen = useIsOpen()
 
   return (
-    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-3">
+    <div className="fixed bottom-[5.25rem] right-4 z-[60] flex flex-col items-end gap-3 md:bottom-4">
       {open && (
         <div className="frosted-strong w-[290px] animate-fade-up rounded-3xl p-4">
           <div className="mb-3 flex items-center justify-between">
