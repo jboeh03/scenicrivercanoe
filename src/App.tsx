@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { LenisProvider } from '@/scroll/LenisProvider'
 import { Nav } from '@/components/Nav'
+import { MobileTabBar } from '@/components/MobileTabBar'
 import { QuickContact } from '@/components/QuickContact'
 import { WeatherTint } from '@/components/WeatherTint'
 import { Home } from '@/pages/Home'
@@ -26,9 +27,10 @@ export default function App() {
 
       <WeatherTint />
       <Nav />
+      <MobileTabBar />
       <QuickContact />
 
-      <div id="scroll-root" className="relative z-10">
+      <div id="scroll-root" className="relative z-10 pb-24 md:pb-0">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/app" element={<AppShowcase />} />
