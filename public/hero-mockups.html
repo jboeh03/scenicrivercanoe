@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scenic River — Cinematic Hero Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { background: '#FFFFFF', foreground: '#000000', muted: '#6F6F6F' },
+        fontFamily: { display: ['"Instrument Serif"', 'serif'], body: ['Inter', 'sans-serif'] },
+      },
+    },
+  }
+</script>
+<style>
+  html, body { margin: 0; background: #fff; }
+  body { font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Instrument Serif', serif; }
+
+  @keyframes fade-rise { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
+  .animate-fade-rise        { animation: fade-rise .8s ease-out both }
+  .animate-fade-rise-delay  { animation: fade-rise .8s ease-out .2s both }
+  .animate-fade-rise-delay-2{ animation: fade-rise .8s ease-out .4s both }
+
+  @keyframes kb { 0% { transform: scale(1.05) translate3d(0,0,0) } 50% { transform: scale(1.16) translate3d(-1.2%,-1%,0) } 100% { transform: scale(1.05) translate3d(0,0,0) } }
+  .kenburns { animation: kb 26s ease-in-out infinite }
+
+  /* Video background layer per spec: top:300px, anchored to the bottom edges. */
+  .hero-media { top: 300px; }
+  @media (max-width: 640px) { .hero-media { top: 180px; } }
+
+  .optbtn { color: #6F6F6F; }
+  .optbtn.is-active { background: #000; color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) { .kenburns { animation: none } }
+</style>
+</head>
+<body class="font-body text-foreground">
+
+  <section class="relative min-h-screen w-full overflow-hidden bg-background">
+    <!-- Background media (z-0) -->
+    <div id="media" class="hero-media absolute left-0 right-0 bottom-0 z-0 overflow-hidden"></div>
+
+    <!-- Navigation (z-10) -->
+    <nav class="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-8 py-6">
+      <a href="#" class="font-display text-3xl tracking-tight text-black">Scenic&nbsp;River<sup class="align-super text-[0.45em]">®</sup></a>
+      <div class="hidden items-center gap-8 md:flex">
+        <a href="#" class="text-sm text-black transition-colors">Home</a>
+        <a href="#" class="text-sm text-[#6F6F6F] transition-colors hover:text-black">Trips</a>
+        <a href="#" class="text-sm text-[#6F6F6F] transition-colors hover:text-black">River Today</a>
+        <a href="#" class="text-sm text-[#6F6F6F] transition-colors hover:text-black">Journal</a>
+        <a href="#" class="text-sm text-[#6F6F6F] transition-colors hover:text-black">Reach Us</a>
+      </div>
+      <a href="#" class="rounded-full bg-black px-6 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]">Begin Journey</a>
+    </nav>
+
+    <!-- Hero content (z-10) -->
+    <div class="relative z-10 flex flex-col items-center justify-center px-6 text-center" style="padding-top: calc(8rem - 75px); padding-bottom: 10rem;">
+      <h1 class="reanim font-display font-normal text-black text-5xl sm:text-7xl md:text-8xl" data-anim="animate-fade-rise" style="max-width: 80rem; line-height: 0.95; letter-spacing: -2.46px;">
+        Beyond <span class="italic text-[#6F6F6F]">the rush,</span> the river runs <span class="italic text-[#6F6F6F]">eternal.</span>
+      </h1>
+      <p class="reanim mt-8 max-w-2xl text-base leading-relaxed text-[#6F6F6F] sm:text-lg" data-anim="animate-fade-rise-delay">
+        A quiet livery on the Little Miami for paddlers, families, and first-time floaters. Through the current and the calm, we shape unhurried days on the water.
+      </p>
+      <a href="#" class="reanim mt-12 rounded-full bg-black px-14 py-5 text-base text-white transition-transform hover:scale-[1.03]" data-anim="animate-fade-rise-delay-2">Begin Journey</a>
+    </div>
+  </section>
+
+  <!-- Option switcher -->
+  <div id="cap" class="pointer-events-none fixed bottom-[4.7rem] left-1/2 z-50 -translate-x-1/2 text-[12px] tracking-wide text-[#6F6F6F]"></div>
+  <div class="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-black/10 bg-white/85 p-1.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.4)] backdrop-blur">
+    <button class="optbtn is-active rounded-full px-4 py-2 text-[12px] font-medium transition-colors" onclick="render(0)">POV Kayak</button>
+    <button class="optbtn rounded-full px-4 py-2 text-[12px] font-medium transition-colors" onclick="render(1)">Aerial Paddlers</button>
+    <button class="optbtn rounded-full px-4 py-2 text-[12px] font-medium transition-colors" onclick="render(2)">The Launch</button>
+  </div>
+
+  <script>
+    const OPTIONS = [
+      { kind: 'video', src: '/video/fletchers-mid.mp4', poster: '/video/fletchers-mid-poster.jpg', label: 'POV Kayak', sub: 'real on-river footage · manual fade-loop' },
+      { kind: 'image', src: '/photos/IMG_1573.jpeg', label: 'Aerial Paddlers', sub: 'summer float from the bridge · Ken Burns' },
+      { kind: 'image', src: '/photos/scenic-launch.jpg', label: 'The Launch', sub: 'colorful boats on the bank · Ken Burns' },
+    ]
+
+    function setupVideo(v) {
+      if (!v) return
+      v.muted = true
+      v.playsInline = true
+      v.style.opacity = '0'
+      const FADE = 0.5
+      const frame = () => {
+        if (!v.isConnected) return // element swapped out — stop the loop
+        const d = v.duration
+        if (d && isFinite(d)) {
+          const t = v.currentTime
+          let o = 1
+          if (t < FADE) o = t / FADE
+          else if (t > d - FADE) o = Math.max(0, (d - t) / FADE)
+          v.style.opacity = String(Math.max(0, Math.min(1, o)))
+        }
+        requestAnimationFrame(frame)
+      }
+      v.addEventListener('ended', () => {
+        v.style.opacity = '0'
+        setTimeout(() => { try { v.currentTime = 0; v.play() } catch (e) {} }, 100)
+      })
+      const start = () => v.play().catch(() => {})
+      if (v.readyState >= 2) start()
+      else v.addEventListener('loadeddata', start, { once: true })
+      requestAnimationFrame(frame)
+    }
+
+    function render(i) {
+      const o = OPTIONS[i]
+      const media = document.getElementById('media')
+      const gradient = '<div class="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white"></div>'
+      if (o.kind === 'video') {
+        media.innerHTML =
+          '<video id="bgv" class="absolute inset-0 h-full w-full object-cover" muted playsinline preload="auto" poster="' + o.poster + '"><source src="' + o.src + '" type="video/mp4"></video>' + gradient
+        setupVideo(document.getElementById('bgv'))
+      } else {
+        media.innerHTML =
+          '<img class="absolute inset-0 h-full w-full object-cover kenburns" alt="" src="' + o.src + '">' + gradient
+      }
+      // replay the staggered entrance animations
+      document.querySelectorAll('.reanim').forEach((el) => {
+        const c = el.getAttribute('data-anim')
+        el.classList.remove(c)
+        void el.offsetWidth
+        el.classList.add(c)
+      })
+      document.querySelectorAll('.optbtn').forEach((b, bi) => b.classList.toggle('is-active', bi === i))
+      document.getElementById('cap').textContent = 'Option ' + (i + 1) + ' · ' + o.label + ' — ' + o.sub
+    }
+
+    render(0)
+  </script>
+</body>
+</html>
