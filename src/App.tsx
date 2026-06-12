@@ -63,9 +63,12 @@ export function PageBackdrop() {
     const loop = () => {
       phase += 0.0026 + vel * 0.0006
       vel *= 0.9
-      const tx = (3.4 * Math.cos(phase * 0.7)).toFixed(3)
-      const ty = (4.6 * Math.sin(phase)).toFixed(3)
-      img.style.transform = `translate3d(${tx}%, ${ty}%, 0) scale(1.18)`
+      // Depth, not pan: zoom toward the river's vanishing point so it feels like
+      // gliding downstream (scroll down pushes forward, up eases back). Min scale
+      // stays > 1 so the image always covers.
+      const s = (1.12 + 0.06 * Math.sin(phase)).toFixed(4)
+      const ty = (1.2 * Math.sin(phase)).toFixed(3)
+      img.style.transform = `translate3d(0, ${ty}%, 0) scale(${s})`
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
@@ -83,7 +86,7 @@ export function PageBackdrop() {
         src="/photos/scenic-launch.jpg"
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full origin-center scale-[1.18] object-cover blur-[2px] will-change-transform"
+        className="absolute inset-0 h-full w-full origin-[50%_40%] scale-[1.12] object-cover blur-[2px] will-change-transform"
         loading="eager"
         fetchPriority="high"
       />
