@@ -1,31 +1,33 @@
 import { business } from '@/data/site'
 
 /**
- * Cinematic header — Instrument Serif headline over a real launch photo that's
- * anchored low and fades into white ("The Launch" concept). On mobile the hero
- * is intentionally short so the live "River Today" gauge crests into view.
+ * Cinematic header — Instrument Serif copy over a full-height launch photo.
+ * A white wash keeps the black serif type legible over the brighter (sky) top
+ * while the river scene stays vivid lower down. Static (no zoom) so nothing
+ * resizes while scrolling.
  */
 export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[76svh] w-full flex-col items-center overflow-hidden bg-white px-6 text-center sm:min-h-[100svh]"
+      className="relative flex min-h-[100svh] w-full flex-col items-center overflow-hidden bg-white px-6 text-center"
     >
-      {/* Background imagery sits in the LOWER half so the serif copy always lands
-          on clean white. Static (no zoom) so nothing resizes while scrolling. */}
-      <div className="absolute bottom-0 left-0 right-0 top-[58%] z-0 overflow-hidden sm:top-[300px]">
+      {/* Full-height background image */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src="/photos/scenic-launch.jpg"
           alt="Kayaks and canoes lined up at the launch on the Little Miami River"
-          className="absolute inset-0 h-full w-full origin-center scale-105 object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
           fetchPriority="high"
         />
+        {/* Wash: stronger at the top (behind the copy) and bottom (blends into
+            the page), lighter in the middle so the river reads as full colour. */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(to bottom, #ffffff 0%, #ffffff 16%, rgba(255,255,255,0) 42%, rgba(255,255,255,0) 70%, #ffffff 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.55) 24%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.12) 72%, rgba(255,255,255,0.9) 100%)',
           }}
         />
       </div>
@@ -43,7 +45,7 @@ export function Hero() {
         </h1>
 
         <p
-          className="animate-fade-rise mt-8 max-w-2xl text-base leading-relaxed text-[#6F6F6F] sm:text-lg"
+          className="animate-fade-rise mt-8 max-w-2xl text-base leading-relaxed text-[#4a4a55] sm:text-lg"
           style={{ animationDelay: '0.2s' }}
         >
           {`${business.tagline} Live conditions, instant booking, and a day on the ${business.river} you'll actually remember — from ${business.short} Canoe Excursions.`}
