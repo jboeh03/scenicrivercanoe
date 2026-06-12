@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import { business } from '@/data/site'
 
 /**
@@ -7,43 +6,6 @@ import { business } from '@/data/site'
  * transparent content and the background flows unbroken into every section.
  */
 export function Hero() {
-  const imgRef = useRef<HTMLImageElement>(null)
-
-  useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const img = imgRef.current
-    if (!img) return
-
-    let phase = 0 // drives the bounded pan
-    let vel = 0 // scroll-injected energy, decays toward 0
-    let lastY = window.scrollY || 0
-    let raf = 0
-
-    const onScroll = () => {
-      const y = window.scrollY || 0
-      vel += y - lastY
-      lastY = y
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    const loop = () => {
-      // Baseline crawl + scroll velocity (signed → reverses on scroll up).
-      phase += 0.0016 + vel * 0.00045
-      vel *= 0.9 // ease scroll energy back out
-      // Pan only — fixed scale gives headroom so edges never show.
-      const tx = (1.4 * Math.cos(phase * 0.7)).toFixed(3)
-      const ty = (2.0 * Math.sin(phase)).toFixed(3)
-      img.style.transform = `translate3d(${tx}%, ${ty}%, 0) scale(1.12)`
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [])
-
   return (
     <section
       id="top"
