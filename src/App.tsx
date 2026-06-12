@@ -61,11 +61,11 @@ export function PageBackdrop() {
     window.addEventListener('scroll', onScroll, { passive: true })
 
     const loop = () => {
-      phase += 0.0016 + vel * 0.00045
+      phase += 0.0026 + vel * 0.0006
       vel *= 0.9
-      const tx = (1.4 * Math.cos(phase * 0.7)).toFixed(3)
-      const ty = (2.0 * Math.sin(phase)).toFixed(3)
-      img.style.transform = `translate3d(${tx}%, ${ty}%, 0) scale(1.12)`
+      const tx = (3.4 * Math.cos(phase * 0.7)).toFixed(3)
+      const ty = (4.6 * Math.sin(phase)).toFixed(3)
+      img.style.transform = `translate3d(${tx}%, ${ty}%, 0) scale(1.18)`
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
@@ -83,7 +83,7 @@ export function PageBackdrop() {
         src="/photos/scenic-launch.jpg"
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full origin-center scale-[1.12] object-cover blur-[2px] will-change-transform"
+        className="absolute inset-0 h-full w-full origin-center scale-[1.18] object-cover blur-[2px] will-change-transform"
         loading="eager"
         fetchPriority="high"
       />
