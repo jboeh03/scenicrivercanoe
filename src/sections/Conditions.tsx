@@ -30,9 +30,9 @@ export function Conditions() {
   const color = STATUS_COLOR[data.status]
 
   return (
-    <Section id="conditions">
+    <Section id="conditions" align="start">
       <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <div>
+        <div className="order-2 lg:order-1">
           <Reveal>
             <p className="eyebrow mb-4">The river, right now</p>
           </Reveal>
@@ -63,7 +63,9 @@ export function Conditions() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.1}>
+        {/* Not wrapped in Reveal: it peeks above the fold on mobile, so it must
+            be visible on load rather than fading in only once scrolled into view. */}
+        <div className="order-1 lg:order-2">
           <FrostedPanel strong className="p-7 sm:p-9">
             <div className="flex items-start justify-between">
               <div>
@@ -135,7 +137,7 @@ export function Conditions() {
               {data.status === 'stop' ? 'Get notified when it reopens' : 'Book while the water’s good'}
             </a>
           </FrostedPanel>
-        </Reveal>
+        </div>
       </div>
     </Section>
   )
