@@ -11,17 +11,23 @@ export function Hero() {
       id="top"
       className="relative flex min-h-[76svh] w-full flex-col items-center overflow-hidden bg-white px-6 text-center sm:min-h-[100svh]"
     >
-      {/* Background imagery: positioned low (top:180px / 300px), fading to white
-          top and bottom so the serif headline reads on clean space. */}
-      <div className="absolute bottom-0 left-0 right-0 top-[180px] z-0 overflow-hidden sm:top-[300px]">
+      {/* Background imagery sits in the LOWER half so the serif copy always lands
+          on clean white. Static (no zoom) so nothing resizes while scrolling. */}
+      <div className="absolute bottom-0 left-0 right-0 top-[58%] z-0 overflow-hidden sm:top-[300px]">
         <img
           src="/photos/scenic-launch.jpg"
           alt="Kayaks and canoes lined up at the launch on the Little Miami River"
-          className="absolute inset-0 h-full w-full origin-center scale-105 object-cover animate-kenburns motion-reduce:animate-none"
+          className="absolute inset-0 h-full w-full origin-center scale-105 object-cover"
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, #ffffff 0%, #ffffff 16%, rgba(255,255,255,0) 42%, rgba(255,255,255,0) 70%, #ffffff 100%)',
+          }}
+        />
       </div>
 
       {/* Hero content */}

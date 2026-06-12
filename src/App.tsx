@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { LenisProvider } from '@/scroll/LenisProvider'
 import { Nav } from '@/components/Nav'
@@ -53,30 +53,9 @@ const HERO_POSTER = '/photos/IMG_1568.jpeg' // their real POV-from-a-kayak shot
  * feels in motion. A white wash keeps copy + frosted panels legible.
  */
 export function StaticBackdrop() {
-  const wrapRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    let raf = 0
-    const loop = () => {
-      const el = wrapRef.current
-      if (el) {
-        // Scroll-linked to the first ~1.4 viewports so the motion is visible while
-        // scrolling the header (whole-page progress made it imperceptible).
-        const vh = window.innerHeight || 800
-        const r = Math.min(1, (window.scrollY || 0) / (vh * 1.4))
-        // "dive into the river": pan up + zoom in as you scroll the hero
-        el.style.transform = `translate3d(0, ${(-r * 12).toFixed(2)}%, 0) scale(${(1.08 + r * 0.2).toFixed(3)})`
-      }
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, [])
-
   return (
     <div className="absolute inset-0 overflow-hidden bg-canvas">
-      <div ref={wrapRef} className="absolute inset-0 will-change-transform">
+      <div className="absolute inset-0">
         {HERO_VIDEO ? (
           <video
             className="absolute inset-0 h-full w-full scale-105 object-cover blur-[2px]"
@@ -92,7 +71,7 @@ export function StaticBackdrop() {
           <img
             src={HERO_POSTER}
             alt="Paddlers on the Little Miami River"
-            className="absolute inset-0 h-full w-full origin-center scale-110 object-cover blur-[3px] animate-kenburns motion-reduce:animate-none"
+            className="absolute inset-0 h-full w-full origin-center scale-105 object-cover blur-[3px]"
             loading="eager"
             fetchPriority="high"
           />
