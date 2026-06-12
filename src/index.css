@@ -26,10 +26,15 @@
     overflow: hidden;
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     @apply bg-canvas text-ink font-sans antialiased;
     margin: 0;
     overflow-x: hidden;
+    max-width: 100%;
   }
 
   ::selection {
