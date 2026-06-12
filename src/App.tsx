@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { LenisProvider } from '@/scroll/LenisProvider'
 import { Nav } from '@/components/Nav'
@@ -9,20 +9,13 @@ import { Home } from '@/pages/Home'
 import { AppShowcase } from '@/pages/AppShowcase'
 import { Store } from '@/pages/Store'
 
-// The WebGL river is heavy and non-essential to first paint — load it lazily so
-// the frosted UI and hero text render instantly.
-const RiverBackdrop = lazy(() =>
-  import('@/three/RiverBackdrop').then((m) => ({ default: m.RiverBackdrop })),
-)
-
 export default function App() {
   return (
     <LenisProvider>
-      {/* Fixed, inert WebGL layer painted behind everything. */}
+      {/* One drifting photo backdrop behind the entire app — unbroken across
+          the header and every section below. */}
       <div className="pointer-events-none fixed inset-0 z-0">
-        <Suspense fallback={<StaticBackdrop />}>
-          <RiverBackdrop />
-        </Suspense>
+        <PageBackdrop />
       </div>
 
       <WeatherTint />
@@ -41,49 +34,66 @@ export default function App() {
   )
 }
 
-// Set this to their real clip (e.g. '/videos/hero.mp4') and the hero becomes a
-// moving video. Null = the real launch photo with Ken Burns + scroll parallax.
-const HERO_VIDEO: string | null = null
-const HERO_POSTER = '/photos/IMG_1568.jpeg' // their real POV-from-a-kayak shot
-
 /**
- * Real-river backdrop. This is what mobile and any non-WebGL device sees (most of
- * our traffic), and the poster while the desktop 3D loads. It glides downstream
- * as you scroll (parallax) on top of a slow Ken Burns drift, so the header always
- * feels in motion. A white wash keeps copy + frosted panels legible.
+ * App-wide background: a single, fixed launch photo behind everything. It drifts
+ * on its own (a slow pan, never a zoom) and scrolling injects velocity so the
+ * drift accelerates scrolling down and reverses scrolling up, then eases back.
+ * A soft wash + blur keeps copy and frosted panels legible over it.
  */
-export function StaticBackdrop() {
+export function PageBackdrop() {
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const img = imgRef.current
+    if (!img) return
+
+    let phase = 0
+    let vel = 0
+    let lastY = window.scrollY || 0
+    let raf = 0
+
+    const onScroll = () => {
+      const y = window.scrollY || 0
+      vel += y - lastY
+      lastY = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    const loop = () => {
+      phase += 0.0016 + vel * 0.00045
+      vel *= 0.9
+      const tx = (1.4 * Math.cos(phase * 0.7)).toFixed(3)
+      const ty = (2.0 * Math.sin(phase)).toFixed(3)
+      img.style.transform = `translate3d(${tx}%, ${ty}%, 0) scale(1.12)`
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+
   return (
     <div className="absolute inset-0 overflow-hidden bg-canvas">
-      <div className="absolute inset-0">
-        {HERO_VIDEO ? (
-          <video
-            className="absolute inset-0 h-full w-full scale-105 object-cover blur-[2px]"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster={HERO_POSTER}
-          >
-            <source src={HERO_VIDEO} type="video/mp4" />
-          </video>
-        ) : (
-          <img
-            src={HERO_POSTER}
-            alt="Paddlers on the Little Miami River"
-            className="absolute inset-0 h-full w-full origin-center scale-105 object-cover blur-[3px]"
-            loading="eager"
-            fetchPriority="high"
-          />
-        )}
-      </div>
-      {/* white wash — keeps copy + frosted panels legible and ties imagery to the
-          monochrome system */}
+      <img
+        ref={imgRef}
+        src="/photos/scenic-launch.jpg"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full origin-center scale-[1.12] object-cover blur-[2px] will-change-transform"
+        loading="eager"
+        fetchPriority="high"
+      />
+      {/* Soft white wash — lets the river read through while keeping section copy
+          and frosted panels legible everywhere. */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(244,244,242,0.90) 0%, rgba(244,244,242,0.55) 28%, rgba(244,244,242,0.58) 62%, rgba(244,244,242,0.92) 100%)',
+            'linear-gradient(to bottom, rgba(255,255,255,0.74) 0%, rgba(255,255,255,0.62) 32%, rgba(255,255,255,0.64) 66%, rgba(255,255,255,0.84) 100%)',
         }}
       />
       <div className="absolute inset-0 grain" />
