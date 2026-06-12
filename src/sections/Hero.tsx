@@ -13,7 +13,7 @@ export function Hero() {
     >
       <div
         className="relative z-10 flex flex-col items-center"
-        style={{ paddingTop: 'calc(8rem + 1rem)', paddingBottom: '4rem' }}
+        style={{ paddingTop: 'calc(8rem + 5rem)', paddingBottom: '4rem' }}
       >
         <h1
           className="animate-fade-rise font-serif font-normal text-black text-5xl sm:text-7xl md:text-8xl"
@@ -28,6 +28,14 @@ export function Hero() {
         >
           {`${business.tagline} Live conditions, instant booking, and a day on the ${business.river} you'll actually remember — from ${business.short} Canoe Excursions.`}
         </p>
+
+        <a
+          href="#conditions"
+          className="animate-fade-rise mt-11 rounded-full bg-black px-12 py-4 text-base text-white transition-transform hover:scale-[1.03]"
+          style={{ animationDelay: '0.4s' }}
+        >
+          Check river conditions
+        </a>
       </div>
     </section>
   )
