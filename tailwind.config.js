@@ -26,6 +26,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
         display: ['"Bricolage Grotesque"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
       },
       letterSpacing: {
         tightest: '-0.045em',
@@ -55,6 +56,10 @@ export default {
           '50%': { transform: 'scale(1.16) translate3d(-1.5%,-1.5%,0)' },
           '100%': { transform: 'scale(1.05) translate3d(0,0,0)' },
         },
+        'fade-rise': {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         floaty: 'floaty 7s ease-in-out infinite',
@@ -62,6 +67,7 @@ export default {
         'fade-up': 'fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both',
         'pulse-ring': 'pulse-ring 2.4s cubic-bezier(0.16,1,0.3,1) infinite',
         kenburns: 'kenburns 28s ease-in-out infinite',
+        'fade-rise': 'fade-rise 0.8s ease-out both',
       },
     },
   },
