@@ -16,6 +16,18 @@ const markerGlyph: Record<MapMarker['kind'], string> = {
 
 export function Trips() {
   const [active, setActive] = useState('mid')
+  // Respect reduced-motion: show the poster still instead of the looping clip.
+  const [reduced, setReduced] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+  )
+  useEffect(() => {
+    const m = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduced(m.matches)
+    m.addEventListener?.('change', onChange)
+    return () => m.removeEventListener?.('change', onChange)
+  }, [])
   const mid = trips.find((t) => t.id === 'mid')!
   const others = trips.filter((t) => t.id !== 'mid')
 
@@ -44,7 +56,25 @@ export function Trips() {
             onMouseEnter={() => setActive('mid')}
           >
             <div className="relative h-52 w-full overflow-hidden">
-              <img src={mid.image} alt="Fletcher's Mid Trip on the Little Miami" className="h-full w-full object-cover" />
+              {reduced ? (
+                <img
+                  src="/video/fletchers-mid-poster.jpg"
+                  alt="Gliding down the Little Miami on the 6-mile Fletcher's Mid Trip"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <video
+                  className="h-full w-full object-cover"
+                  src="/video/fletchers-mid.mp4"
+                  poster="/video/fletchers-mid-poster.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="POV gliding down the Little Miami on the 6-mile Fletcher's Mid Trip"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
               <span className="absolute left-4 top-4 rounded-full bg-brand-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink">
                 Most loved
